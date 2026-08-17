@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#107c10" />
   <meta name="description" content="Preparador USB para BadUpdate 1.3 + XeUnshackle en Xbox 360." />
-  <title>Xbox 360 USB Setup — BadUpdate 1.3 + XeUnshackle</title>
+  <title>BadUpdate USB Guide — Xbox 360</title>
 
   <style>
     :root{
@@ -329,7 +329,7 @@
       <div class="brand">
         <div class="orb">X</div>
         <div>
-          <strong>Xbox 360 USB Setup</strong>
+          <strong>BadUpdate USB Guide</strong>
           <span>BadUpdate 1.3 + XeUnshackle</span>
         </div>
       </div>
@@ -339,16 +339,19 @@
     <main>
       <section class="hero">
         <div>
-          <div class="eyebrow"><span class="dot"></span> Preparador USB para Xbox 360</div>
-          <h1>Prepara tu USB.<br><em>Sin complicaciones.</em></h1>
+          <div class="eyebrow"><span class="dot"></span> Guía USB para Xbox 360</div>
+          <h1>Configura BadUpdate.<br><em>Paso a paso.</em></h1>
           <p class="lead">
-            Comprueba tu pendrive, valida la estructura necesaria y descarga el paquete preparado
-            con BadUpdate 1.3 + XeUnshackle desde un único sitio.
+            Sigue una guía sencilla, comprueba que la estructura de tu USB es correcta y descarga
+            el paquete con BadUpdate 1.3 + XeUnshackle desde un único sitio.
           </p>
           <div class="hero-actions">
-            <button class="primary" id="selectUsbTop">Seleccionar USB</button>
+            <button class="primary" id="selectUsbTop">Comprobar mi USB</button>
             <a class="btn secondary" href="#descarga">Descargar paquete</a>
           </div>
+          <p style="margin-top:16px;color:#7f8b82;font-size:13px;line-height:1.55">
+            Esta web no formatea ni copia archivos automáticamente: te guía paso a paso y verifica que la estructura básica esté correcta.
+          </p>
         </div>
 
         <div class="console-card" aria-hidden="true">
@@ -364,24 +367,24 @@
         <article class="step">
           <div class="num">1</div>
           <h3>Selecciona tu USB</h3>
-          <p>El navegador te pedirá permiso para acceder a la carpeta raíz del pendrive.</p>
+          <p>Selecciona la raíz de tu pendrive para comprobar su contenido.</p>
         </article>
         <article class="step">
           <div class="num">2</div>
           <h3>Comprueba el contenido</h3>
-          <p>La web buscará la estructura esperada de BadUpdate y te avisará si falta algo.</p>
+          <p>La web comprobará la estructura esperada de BadUpdate y te avisará si falta algún archivo.</p>
         </article>
         <article class="step">
           <div class="num">3</div>
           <h3>Descarga el paquete</h3>
-          <p>Baja tu paquete completo desde GitHub y extráelo en la raíz del USB preparado en FAT32.</p>
+          <p>Descarga el paquete desde GitHub y extráelo manualmente en la raíz de tu USB FAT32.</p>
         </article>
       </section>
 
       <section class="panel" id="usb">
         <div class="panel-head">
           <div>
-            <h2>Comprobación del USB</h2>
+            <h2>Comprobar estructura del USB</h2>
             <div class="sub">Selecciona la raíz del pendrive. No se sube ningún archivo a Internet.</div>
           </div>
         </div>
@@ -395,7 +398,7 @@
         </div>
 
         <div class="actions">
-          <button class="primary" id="selectUsb">Seleccionar USB</button>
+          <button class="primary" id="selectUsb">Comprobar mi USB</button>
           <button class="secondary" id="formatHelp">¿Necesitas formatearlo?</button>
         </div>
 
@@ -434,14 +437,14 @@
         <div class="panel-head">
           <div>
             <h2>Paquete completo</h2>
-            <div class="sub">Configura una sola URL en el código y este botón apuntará a tu ZIP de GitHub.</div>
+            <div class="sub">Configura una sola URL en el código y este botón apuntará al ZIP publicado en tu GitHub.</div>
           </div>
         </div>
 
         <div class="download-card">
           <div>
             <h3>BadUpdate 1.3 + XeUnshackle</h3>
-            <p>Paquete preparado por TheWizWiki para copiar en un USB FAT32 siguiendo la guía del proyecto.</p>
+            <p>Paquete recopilado para facilitar la instalación, respetando los créditos y proyectos originales.</p>
           </div>
           <a class="btn primary" id="downloadBtn" href="#" target="_blank" rel="noopener">
             Descargar paquete
@@ -511,7 +514,7 @@
       const PACKAGE_URL =
         "https://github.com/TUUSUARIO/TUREPO/releases/download/v1.0/Xbox360-Package.zip";
     */
-    const PACKAGE_URL = "https://github.com/TheWizWikii/BadUpdateUSBSetup/releases/download/1.3/BadUpdate-XeUnshackle.zip";
+    const PACKAGE_URL = "PON_AQUI_LA_URL_DE_TU_ZIP";
 
     const $ = (id) => document.getElementById(id);
     const selectButtons = [$("selectUsb"), $("selectUsbTop")];
@@ -584,7 +587,7 @@
         usbStatus.innerHTML = `
           <span class="status-icon"></span>
           <div>
-            <strong>${allOk ? "El USB parece estar preparado" : "El USB necesita archivos"}</strong><br>
+            <strong>${allOk ? "La estructura del USB parece correcta" : "Faltan archivos en el USB"}</strong><br>
             <small>${
               allOk
                 ? "Se ha encontrado la estructura básica esperada."
