@@ -6,6 +6,8 @@ Proyecto creado para facilitar la preparación y comprensión del proceso de uso
 > Este repositorio **no es BadUpdate ni XeUnshackle**, no pretende atribuirse el trabajo de sus desarrolladores y no está afiliado con Microsoft o Xbox.  
 > Todo el mérito de los exploits, parches y herramientas originales corresponde a sus respectivos autores y colaboradores.
 
+✅ Enlace: https://thewizwikii.github.io/BadUpdateUSBSetup/
+
 ## ¿Qué es este proyecto?
 
 La idea de este repositorio es ofrecer una interfaz sencilla y visual, con estética inspirada en Xbox, para ayudar a preparar un dispositivo USB y reunir en un mismo lugar la información necesaria para utilizar **BadUpdate** junto con **XeUnshackle**.
