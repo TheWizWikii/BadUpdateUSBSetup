@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#107c10" />
-  <meta name="description" content="Preparador USB para BadUpdate 1.3 + XeUnshackle en Xbox 360." />
+  <meta name="description" content="Guía USB para BadUpdate 1.3 + XeUnshackle y configuración de Aurora en Xbox 360." />
   <title>BadUpdate USB Guide — Xbox 360</title>
 
   <style>
@@ -399,7 +399,8 @@
           </p>
           <div class="hero-actions">
             <button class="primary" id="selectUsbTop">Comprobar mi USB</button>
-            <a class="btn secondary" href="#descarga">Descargar paquete</a>
+            <a class="btn secondary" href="#descarga">Parte 1 · BadUpdate</a>
+            <a class="btn secondary" href="#aurora">Parte 2 · Aurora</a>
           </div>
           <p style="margin-top:16px;color:#7f8b82;font-size:13px;line-height:1.55">
             Esta web no formatea ni copia archivos automáticamente: te guía paso a paso y verifica que la estructura básica esté correcta.
@@ -467,6 +468,16 @@
             <span><strong>default.xex</strong><br><small>Payload dentro de BadUpdatePayload</small></span>
             <span class="badge" id="badgeXex">Pendiente</span>
           </div>
+
+          <div class="check" style="margin-top:8px;border-color:rgba(82,210,115,.22)">
+            <span><strong>Apps/Aurora/Aurora.xex</strong><br><small>Parte 2 · Dashboard Aurora</small></span>
+            <span class="badge" id="badgeAurora">Pendiente</span>
+          </div>
+
+          <div class="check">
+            <span><strong>launch.ini</strong><br><small>Parte 2 · Configuración de DashLaunch</small></span>
+            <span class="badge" id="badgeLaunchIni">Pendiente</span>
+          </div>
         </div>
       </section>
 
@@ -508,6 +519,59 @@
           <div>
             <strong>Falta configurar la URL</strong><br>
             <small>Edita <code>PACKAGE_URL</code> al principio del JavaScript con el enlace de tu release.</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="aurora">
+        <div class="panel-head">
+          <div>
+            <h2>Parte 2 · Aurora + Autoboot</h2>
+            <div class="sub">
+              Para quienes ya tienen BadUpdate + XeUnshackle funcionando y quieren dejar Aurora listo para cargar después del exploit.
+            </div>
+          </div>
+        </div>
+
+        <div class="download-card">
+          <div>
+            <h3>Aurora + launch.ini</h3>
+            <p>
+              Descarga el segundo paquete y extrae su contenido en la raíz del mismo USB.
+              La estructura recomendada será <code>Apps/Aurora/</code> junto con <code>launch.ini</code> en la raíz.
+            </p>
+          </div>
+          <a class="btn primary" id="auroraDownloadBtn" href="#" target="_blank" rel="noopener">
+            Descargar Parte 2
+          </a>
+        </div>
+
+        <div class="status warn" id="auroraDownloadNotice" style="margin-top:14px">
+          <span class="status-icon"></span>
+          <div>
+            <strong>Falta configurar la URL de la Parte 2</strong><br>
+            <small>Edita <code>AURORA_PACKAGE_URL</code> con el enlace a tu ZIP de GitHub.</small>
+          </div>
+        </div>
+
+        <div class="warning" style="margin-top:16px">
+          <strong>Ruta de ejemplo:</strong> si Aurora está en
+          <code>Usb:\Apps\Aurora\Aurora.xex</code>, el <code>launch.ini</code>
+          debe apuntar exactamente a esa ubicación. Si cambias la carpeta, cambia también la ruta.
+        </div>
+
+        <div class="check-list" style="margin-top:16px">
+          <div class="check">
+            <span><strong>1. Extraer en la raíz</strong><br><small>No copies una carpeta contenedora adicional.</small></span>
+            <span class="badge good">USB</span>
+          </div>
+          <div class="check">
+            <span><strong>2. Comprobar archivos</strong><br><small>Usa “Comprobar mi USB” para verificar Aurora y launch.ini.</small></span>
+            <span class="badge good">Verificar</span>
+          </div>
+          <div class="check">
+            <span><strong>3. Ejecutar BadUpdate</strong><br><small>XeUnshackle carga DashLaunch y se utiliza la configuración del launch.ini.</small></span>
+            <span class="badge good">Xbox 360</span>
           </div>
         </div>
       </section>
@@ -567,6 +631,9 @@
         "https://github.com/TUUSUARIO/TUREPO/releases/download/v1.0/Xbox360-Package.zip";
     */
     const PACKAGE_URL = "https://github.com/TheWizWikii/BadUpdateUSBSetup/releases/download/1.3/BadUpdate-XeUnshackle.zip";
+
+    // PARTE 2: cambia esta URL cuando publiques tu ZIP con Aurora + launch.ini.
+    const AURORA_PACKAGE_URL = "https://github.com/TheWizWikii/BadUpdateUSBSetup/releases/download/1.3/Aurora.zip";
 
     const $ = (id) => document.getElementById(id);
     const selectButtons = [$("selectUsb"), $("selectUsbTop")];
@@ -630,20 +697,40 @@
           } catch {}
         }
 
+        let hasAurora = false;
+        try {
+          const appsDir = await root.getDirectoryHandle("Apps");
+          const auroraDir = await appsDir.getDirectoryHandle("Aurora");
+          await auroraDir.getFileHandle("Aurora.xex");
+          hasAurora = true;
+        } catch {}
+
+        let hasLaunchIni = false;
+        try {
+          await root.getFileHandle("launch.ini");
+          hasLaunchIni = true;
+        } catch {}
+
         setBadge("badgePayload", hasPayload);
         setBadge("badgeContent", hasContent);
         setBadge("badgeXex", hasXex);
+        setBadge("badgeAurora", hasAurora);
+        setBadge("badgeLaunchIni", hasLaunchIni);
 
-        const allOk = hasPayload && hasContent && hasXex;
-        usbStatus.className = allOk ? "status ok" : "status warn";
+        const part1Ok = hasPayload && hasContent && hasXex;
+        const part2Ok = hasAurora && hasLaunchIni;
+
+        usbStatus.className = part1Ok ? "status ok" : "status warn";
         usbStatus.innerHTML = `
           <span class="status-icon"></span>
           <div>
-            <strong>${allOk ? "La estructura del USB parece correcta" : "Faltan archivos en el USB"}</strong><br>
+            <strong>${part1Ok ? "BadUpdate está correctamente preparado" : "Faltan archivos de BadUpdate"}</strong><br>
             <small>${
-              allOk
-                ? "Se ha encontrado la estructura básica esperada."
-                : "Descarga el paquete completo y extráelo en la raíz del USB."
+              part1Ok
+                ? (part2Ok
+                    ? "Parte 1 y Parte 2 detectadas: BadUpdate + Aurora parecen correctamente colocados."
+                    : "Parte 1 correcta. Aurora es opcional y corresponde a la Parte 2 de la guía.")
+                : "Descarga el paquete de la Parte 1 y extráelo en la raíz del USB."
             }</small>
           </div>`;
 
@@ -682,6 +769,17 @@
       downloadBtn.addEventListener("click", (e) => {
         e.preventDefault();
         $("downloadNotice").scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+
+    const auroraDownloadBtn = $("auroraDownloadBtn");
+    if (AURORA_PACKAGE_URL && !AURORA_PACKAGE_URL.startsWith("PON_AQUI")) {
+      auroraDownloadBtn.href = AURORA_PACKAGE_URL;
+      $("auroraDownloadNotice").style.display = "none";
+    } else {
+      auroraDownloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        $("auroraDownloadNotice").scrollIntoView({ behavior: "smooth", block: "center" });
       });
     }
     // Fondo animado: red de nodos verde neón
