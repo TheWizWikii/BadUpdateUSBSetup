@@ -478,11 +478,6 @@
             <span><strong>launch.ini</strong><br><small>Parte 2 · Configuración de DashLaunch</small></span>
             <span class="badge" id="badgeLaunchIni">Pendiente</span>
           </div>
-
-          <div class="check">
-            <span><strong>Apps/Aurora/Skins/Default</strong><br><small>Parte 2 · Skin necesario para evitar pantalla negra</small></span>
-            <span class="badge" id="badgeAuroraSkin">Pendiente</span>
-          </div>
         </div>
       </section>
 
@@ -563,12 +558,6 @@
           <strong>Ruta de ejemplo:</strong> si Aurora está en
           <code>Usb:\Apps\Aurora\Aurora.xex</code>, el <code>launch.ini</code>
           debe apuntar exactamente a esa ubicación. Si cambias la carpeta, cambia también la ruta.
-        </div>
-
-        <div class="warning" style="margin-top:12px;border-color:rgba(255,91,91,.28);background:rgba(255,91,91,.055);color:#ffc1c1">
-          <strong>Muy importante:</strong> no elimines la carpeta
-          <code>Apps/Aurora/Skins/Default</code>. Aurora puede arrancar pero quedarse en pantalla negra
-          si falta el skin por defecto.
         </div>
 
         <div class="check-list" style="margin-top:16px">
@@ -673,26 +662,26 @@
 
     async function fileExistsCaseInsensitive(dirHandle, wantedName) {
       const target = wantedName.toLowerCase();
-
       for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === "file" && name.toLowerCase() === target) {
-          return true;
-        }
+        if (handle.kind === "file" && name.toLowerCase() === target) return true;
       }
-
       return false;
     }
 
     async function getDirectoryCaseInsensitive(dirHandle, wantedName) {
       const target = wantedName.toLowerCase();
-
       for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === "directory" && name.toLowerCase() === target) {
-          return handle;
-        }
+        if (handle.kind === "directory" && name.toLowerCase() === target) return handle;
       }
-
       return null;
+    }
+
+    async function directoryContainsExtension(dirHandle, extension) {
+      const ext = extension.toLowerCase();
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (handle.kind === "file" && name.toLowerCase().endsWith(ext)) return true;
+      }
+      return false;
     }
 
     async function checkUsb() {
@@ -739,14 +728,13 @@
           const appsDir = await getDirectoryCaseInsensitive(root, "Apps");
           if (appsDir) {
             const auroraDir = await getDirectoryCaseInsensitive(appsDir, "Aurora");
-
             if (auroraDir) {
               hasAurora = await fileExistsCaseInsensitive(auroraDir, "Aurora.xex");
 
               const skinsDir = await getDirectoryCaseInsensitive(auroraDir, "Skins");
               if (skinsDir) {
-                const defaultSkinDir = await getDirectoryCaseInsensitive(skinsDir, "Default");
-                hasAuroraSkin = !!defaultSkinDir;
+                // Aurora usa paquetes de skin .xzp dentro de la carpeta Skins.
+                hasAuroraSkin = await directoryContainsExtension(skinsDir, ".xzp");
               }
             }
           }
@@ -754,7 +742,12 @@
           console.warn("Error comprobando Aurora:", error);
         }
 
+        // launch.ini debe existir EXACTAMENTE con ese nombre.
         const hasLaunchIni = await fileExistsCaseInsensitive(root, "launch.ini");
+
+        // Detectamos el error típico de Windows al guardar como launch.ini.ini.
+        const hasDoubleLaunchIni = !hasLaunchIni &&
+          await fileExistsCaseInsensitive(root, "launch.ini.ini");
 
         setBadge("badgePayload", hasPayload);
         setBadge("badgeContent", hasContent);
@@ -762,6 +755,12 @@
         setBadge("badgeAurora", hasAurora);
         setBadge("badgeLaunchIni", hasLaunchIni);
         setBadge("badgeAuroraSkin", hasAuroraSkin);
+
+        if (hasDoubleLaunchIni) {
+          const badge = $("badgeLaunchIni");
+          badge.textContent = "Renombrar";
+          badge.className = "badge missing";
+        }
 
         const part1Ok = hasPayload && hasContent && hasXex;
         const part2Ok = hasAurora && hasLaunchIni && hasAuroraSkin;
@@ -774,8 +773,8 @@
             <small>${
               part1Ok
                 ? (part2Ok
-                    ? "Parte 1 y Parte 2 detectadas: BadUpdate + Aurora + launch.ini + skin Default están correctamente colocados."
-                    : "Parte 1 correcta. Revisa los elementos de la Parte 2 que aparezcan como No encontrado.")
+                    ? "Parte 1 y Parte 2 detectadas: BadUpdate + Aurora parecen correctamente colocados."
+                    : "Parte 1 correcta. Aurora es opcional y corresponde a la Parte 2 de la guía.")
                 : "Descarga el paquete de la Parte 1 y extráelo en la raíz del USB."
             }</small>
           </div>`;
