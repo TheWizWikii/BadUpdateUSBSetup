@@ -399,9 +399,9 @@
             el paquete con BadUpdate 1.3 + XeUnshackle desde un único sitio.
           </p>
           <div class="hero-actions">
-            <button class="primary" id="selectUsbTop">Comprobar mi USB</button>
-            <a class="btn secondary" href="#descarga">Parte 1 · BadUpdate</a>
-            <a class="btn secondary" href="#aurora">Parte 2 · Aurora</a>
+            <a class="btn primary" href="#descarga">Descargar Parte 1</a>
+            <a class="btn secondary" href="#aurora">Descargar Parte 2</a>
+            <button class="secondary" id="selectUsbTop">Comprobar mi USB</button>
           </div>
           <p style="margin-top:16px;color:#7f8b82;font-size:13px;line-height:1.55">
             Esta web no formatea ni copia archivos automáticamente: te guía paso a paso y verifica que la estructura básica esté correcta.
@@ -420,86 +420,24 @@
       <section class="steps">
         <article class="step">
           <div class="num">1</div>
-          <h3>Selecciona tu USB</h3>
-          <p>Selecciona la raíz de tu pendrive para comprobar su contenido.</p>
+          <h3>Descarga el paquete</h3>
+          <p>Descarga la Parte 1 y, si quieres Aurora, también el paquete de la Parte 2.</p>
         </article>
         <article class="step">
           <div class="num">2</div>
-          <h3>Comprueba el contenido</h3>
-          <p>La web comprobará la estructura esperada de BadUpdate y te avisará si falta algún archivo.</p>
+          <h3>Copia al USB</h3>
+          <p>Extrae el contenido en la raíz de tu pendrive preparado en FAT32.</p>
         </article>
         <article class="step">
           <div class="num">3</div>
-          <h3>Descarga el paquete</h3>
-          <p>Descarga el paquete desde GitHub y extráelo manualmente en la raíz de tu USB FAT32.</p>
+          <h3>Comprueba tu USB</h3>
+          <p>Selecciona la raíz del pendrive y verifica que la estructura esté correctamente colocada.</p>
         </article>
       </section>
 
-      <section class="panel" id="usb">
-        <div class="panel-head">
-          <div>
-            <h2>Comprobar estructura del USB</h2>
-            <div class="sub">Selecciona la raíz del pendrive. No se sube ningún archivo a Internet.</div>
-          </div>
-        </div>
 
-        <div class="status" id="usbStatus">
-          <span class="status-icon"></span>
-          <div>
-            <strong>Ningún USB seleccionado</strong><br>
-            <small>Selecciona la unidad para comenzar la comprobación.</small>
-          </div>
-        </div>
 
-        <div class="actions">
-          <button class="primary" id="selectUsb">Comprobar mi USB</button>
-          <button class="secondary" id="confirmLaunchIni">Confirmar launch.ini</button>
-          <button class="secondary" id="formatHelp">¿Necesitas formatearlo?</button>
-        </div>
 
-        <div class="check-list" id="checkList" hidden>
-          <div class="check">
-            <span><strong>BadUpdatePayload</strong><br><small>Carpeta del payload</small></span>
-            <span class="badge" id="badgePayload">Pendiente</span>
-          </div>
-          <div class="check">
-            <span><strong>Content</strong><br><small>Contenido necesario para Rock Band Blitz</small></span>
-            <span class="badge" id="badgeContent">Pendiente</span>
-          </div>
-          <div class="check">
-            <span><strong>default.xex</strong><br><small>Payload dentro de BadUpdatePayload</small></span>
-            <span class="badge" id="badgeXex">Pendiente</span>
-          </div>
-
-          <div class="check" style="margin-top:8px;border-color:rgba(82,210,115,.22)">
-            <span><strong>Apps/Aurora/Aurora.xex</strong><br><small>Parte 2 · Dashboard Aurora</small></span>
-            <span class="badge" id="badgeAurora">Pendiente</span>
-          </div>
-
-          <div class="check">
-            <span>
-              <strong>launch.ini</strong><br>
-              <small>Parte 2 · Chrome no expone este archivo al comprobar la carpeta. Verificación manual.</small>
-            </span>
-            <span class="badge" id="badgeLaunchIni">Manual</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>Formato recomendado</h2>
-            <div class="sub">La Xbox 360 debe poder leer correctamente el dispositivo.</div>
-          </div>
-        </div>
-
-        <div class="warning">
-          <strong>Importante:</strong> una página web no puede formatear de forma segura una unidad USB
-          ni detectar de forma fiable si el sistema de archivos es FAT32. Si tienes dudas, utiliza las
-          herramientas de Windows o prepara el dispositivo desde la propia Xbox 360 antes de copiar los archivos.
-        </div>
-      </section>
 
       <section class="panel" id="descarga">
         <div class="panel-head">
@@ -565,13 +503,6 @@
           debe apuntar exactamente a esa ubicación. Si cambias la carpeta, cambia también la ruta.
         </div>
 
-        <div class="warning" style="margin-top:12px">
-          <strong>Sobre launch.ini:</strong> los navegadores Chromium pueden ocultar determinados
-          archivos de configuración al conceder acceso a una carpeta. Por eso esta web no puede
-          verificar automáticamente <code>launch.ini</code> aunque esté en la raíz del USB.
-          Compruébalo en el Explorador de Windows y pulsa <strong>Confirmar launch.ini</strong>.
-        </div>
-
         <div class="check-list" style="margin-top:16px">
           <div class="check">
             <span><strong>1. Extraer en la raíz</strong><br><small>No copies una carpeta contenedora adicional.</small></span>
@@ -586,6 +517,81 @@
             <span class="badge good">Xbox 360</span>
           </div>
         </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Prepara y copia al USB</h2>
+            <div class="sub">Antes de copiar los paquetes, asegúrate de que la Xbox 360 pueda leer correctamente el dispositivo.</div>
+          </div>
+        </div>
+
+        <div class="warning">
+          <strong>Importante:</strong> una página web no puede formatear de forma segura una unidad USB
+          ni detectar de forma fiable si el sistema de archivos es FAT32. Si tienes dudas, utiliza las
+          herramientas de Windows o prepara el dispositivo desde la propia Xbox 360 antes de copiar los archivos.
+        </div>
+      </section>
+
+      <section class="panel" id="usb">
+        <div class="panel-head">
+          <div>
+            <h2>Comprobar estructura del USB</h2>
+            <div class="sub">Selecciona la raíz del pendrive. No se sube ningún archivo a Internet.</div>
+          </div>
+        </div>
+
+        <div class="status" id="usbStatus">
+          <span class="status-icon"></span>
+          <div>
+            <strong>Ningún USB seleccionado</strong><br>
+            <small>Selecciona la unidad para comenzar la comprobación.</small>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="selectUsb">Comprobar mi USB</button>
+          <button class="secondary" id="confirmLaunchIni">Confirmar launch.ini</button>
+          <button class="secondary" id="formatHelp">¿Necesitas formatearlo?</button>
+        </div>
+
+        <div class="check-list" id="checkList" hidden>
+          <div class="check">
+            <span><strong>BadUpdatePayload</strong><br><small>Carpeta del payload</small></span>
+            <span class="badge" id="badgePayload">Pendiente</span>
+          </div>
+          <div class="check">
+            <span><strong>Content</strong><br><small>Contenido necesario para Rock Band Blitz</small></span>
+            <span class="badge" id="badgeContent">Pendiente</span>
+          </div>
+          <div class="check">
+            <span><strong>default.xex</strong><br><small>Payload dentro de BadUpdatePayload</small></span>
+            <span class="badge" id="badgeXex">Pendiente</span>
+          </div>
+
+          <div class="check" style="margin-top:8px;border-color:rgba(82,210,115,.22)">
+            <span><strong>Apps/Aurora/Aurora.xex</strong><br><small>Parte 2 · Dashboard Aurora</small></span>
+            <span class="badge" id="badgeAurora">Pendiente</span>
+          </div>
+
+          <div class="check">
+            <span><strong>launch.ini</strong><br><small>Parte 2 · Verificación manual en la raíz del USB</small></span>
+            <span class="badge manual" id="badgeLaunchIni">Manual</span>
+          </div>
+
+          <div class="check">
+            <span><strong>Apps/Aurora/Skins</strong><br><small>Parte 2 · Archivos de skin de Aurora</small></span>
+            <span class="badge" id="badgeAuroraSkin">Pendiente</span>
+          </div>
+        </div>
+
+        <details style="margin-top:14px">
+          <summary style="cursor:pointer;color:#9fac9f;font-size:13px">
+            Diagnóstico: mostrar archivos detectados en la raíz
+          </summary>
+          <pre id="usbDebugList" style="white-space:pre-wrap;margin-top:10px;padding:14px;border:1px solid #1b271e;border-radius:12px;background:#090d0a;color:#b8c3bb;font-size:12px"></pre>
+        </details>
       </section>
 
       <section class="panel">
@@ -673,6 +679,65 @@
       }
     }
 
+
+    function normalizeEntryName(name) {
+      return String(name)
+        .normalize("NFKC")
+        .replace(/\u200B/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    async function getRootEntries(dirHandle) {
+      const entries = [];
+      for await (const [name, handle] of dirHandle.entries()) {
+        entries.push({
+          name,
+          handle,
+          normalized: normalizeEntryName(name)
+        });
+      }
+      return entries;
+    }
+
+    async function findFileFlexible(dirHandle, wantedName) {
+      const target = normalizeEntryName(wantedName);
+      const entries = await getRootEntries(dirHandle);
+
+      return entries.find(({ handle, normalized }) => {
+        if (handle.kind !== "file") return false;
+
+        if (normalized === target) return true;
+
+        // Caso típico de Windows: launch.ini.ini
+        if (target === "launch.ini" && /^launch(?:\.ini)+$/.test(normalized)) {
+          return true;
+        }
+
+        return false;
+      }) || null;
+    }
+
+    async function findDirectoryFlexible(dirHandle, wantedName) {
+      const target = normalizeEntryName(wantedName);
+      const entries = await getRootEntries(dirHandle);
+
+      return entries.find(({ handle, normalized }) =>
+        handle.kind === "directory" && normalized === target
+      )?.handle || null;
+    }
+
+    async function directoryContainsSkinFiles(dirHandle) {
+      const entries = await getRootEntries(dirHandle);
+
+      // Con encontrar archivos dentro de Skins ya sabemos que no está vacía.
+      // También detectamos .xzp si el paquete de Aurora los usa.
+      return entries.some(({ handle, normalized }) =>
+        handle.kind === "file" &&
+        (normalized.endsWith(".xzp") || normalized.length > 0)
+      );
+    }
+
     async function checkUsb() {
       if (!("showDirectoryPicker" in window)) {
         usbStatus.className = "status bad";
@@ -698,6 +763,16 @@
 
         checkList.hidden = false;
 
+        try {
+          const debugEntries = await getRootEntries(root);
+          const debugEl = $("usbDebugList");
+          if (debugEl) {
+            debugEl.textContent = debugEntries
+              .map(e => `${e.handle.kind === "directory" ? "[DIR] " : "[FILE]"} ${e.name}`)
+              .join("\n");
+          }
+        } catch {}
+
         const hasPayload = await existsInDirectory(root, "BadUpdatePayload", "directory");
         const hasContent = await existsInDirectory(root, "Content", "directory");
 
@@ -711,13 +786,10 @@
         }
 
         let hasAurora = false;
-        try {
-          const appsDir = await root.getDirectoryHandle("Apps");
-          const auroraDir = await appsDir.getDirectoryHandle("Aurora");
-          await auroraDir.getFileHandle("Aurora.xex");
-          hasAurora = true;
-        } catch {}
+        let hasAuroraSkin = false;
 
+        try {
+          const rootEntries = await getRootEntries(root);
         setBadge("badgePayload", hasPayload);
         setBadge("badgeContent", hasContent);
         setBadge("badgeXex", hasXex);
@@ -727,8 +799,12 @@
         launchBadge.textContent = launchIniConfirmed ? "Confirmado" : "Manual";
         launchBadge.className = "badge " + (launchIniConfirmed ? "good" : "manual");
 
+        if ($("badgeAuroraSkin")) {
+          setBadge("badgeAuroraSkin", hasAuroraSkin);
+        }
+
         const part1Ok = hasPayload && hasContent && hasXex;
-        const part2Ok = hasAurora && launchIniConfirmed;
+        const part2Ok = hasAurora && hasLaunchIni && (!$("badgeAuroraSkin") || hasAuroraSkin);
 
         usbStatus.className = part1Ok ? "status ok" : "status warn";
         usbStatus.innerHTML = `
@@ -738,8 +814,8 @@
             <small>${
               part1Ok
                 ? (part2Ok
-                    ? "Parte 1 y Parte 2 preparadas: BadUpdate + Aurora detectados y launch.ini confirmado manualmente."
-                    : "Parte 1 correcta. Para completar la Parte 2, comprueba launch.ini manualmente y pulsa Confirmar launch.ini.")
+                    ? "Parte 1 y Parte 2 detectadas: BadUpdate + Aurora parecen correctamente colocados."
+                    : "Parte 1 correcta. Aurora es opcional y corresponde a la Parte 2 de la guía.")
                 : "Descarga el paquete de la Parte 1 y extráelo en la raíz del USB."
             }</small>
           </div>`;
