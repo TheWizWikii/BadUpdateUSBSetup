@@ -282,6 +282,7 @@
     .badge{font-size:11px;font-weight:900;border-radius:999px;padding:6px 9px;background:#18221b;color:#aeb8b0}
     .badge.good{background:rgba(74,222,128,.1);color:#8ff0aa}
     .badge.missing{background:rgba(255,91,91,.09);color:#ff9696}
+    .badge.manual{background:rgba(255,203,69,.10);color:#ffd86b}
 
     .warning{
       border:1px solid rgba(255,203,69,.25);
@@ -452,6 +453,7 @@
 
         <div class="actions">
           <button class="primary" id="selectUsb">Comprobar mi USB</button>
+          <button class="secondary" id="confirmLaunchIni">Confirmar launch.ini</button>
           <button class="secondary" id="formatHelp">¿Necesitas formatearlo?</button>
         </div>
 
@@ -475,22 +477,13 @@
           </div>
 
           <div class="check">
-            <span><strong>launch.ini</strong><br><small>Parte 2 · Configuración de DashLaunch</small></span>
-            <span class="badge" id="badgeLaunchIni">Pendiente</span>
-          </div>
-
-          <div class="check">
-            <span><strong>Apps/Aurora/Skins</strong><br><small>Parte 2 · Archivos de skin de Aurora</small></span>
-            <span class="badge" id="badgeAuroraSkin">Pendiente</span>
+            <span>
+              <strong>launch.ini</strong><br>
+              <small>Parte 2 · Chrome no expone este archivo al comprobar la carpeta. Verificación manual.</small>
+            </span>
+            <span class="badge" id="badgeLaunchIni">Manual</span>
           </div>
         </div>
-
-        <details style="margin-top:14px">
-          <summary style="cursor:pointer;color:#9fac9f;font-size:13px">
-            Diagnóstico: mostrar archivos detectados en la raíz
-          </summary>
-          <pre id="usbDebugList" style="white-space:pre-wrap;margin-top:10px;padding:14px;border:1px solid #1b271e;border-radius:12px;background:#090d0a;color:#b8c3bb;font-size:12px"></pre>
-        </details>
       </section>
 
       <section class="panel">
@@ -572,6 +565,13 @@
           debe apuntar exactamente a esa ubicación. Si cambias la carpeta, cambia también la ruta.
         </div>
 
+        <div class="warning" style="margin-top:12px">
+          <strong>Sobre launch.ini:</strong> los navegadores Chromium pueden ocultar determinados
+          archivos de configuración al conceder acceso a una carpeta. Por eso esta web no puede
+          verificar automáticamente <code>launch.ini</code> aunque esté en la raíz del USB.
+          Compruébalo en el Explorador de Windows y pulsa <strong>Confirmar launch.ini</strong>.
+        </div>
+
         <div class="check-list" style="margin-top:16px">
           <div class="check">
             <span><strong>1. Extraer en la raíz</strong><br><small>No copies una carpeta contenedora adicional.</small></span>
@@ -651,6 +651,7 @@
     const selectButtons = [$("selectUsb"), $("selectUsbTop")];
     const usbStatus = $("usbStatus");
     const checkList = $("checkList");
+    let launchIniConfirmed = false;
 
     function setBadge(id, ok) {
       const el = $(id);
@@ -670,65 +671,6 @@
           return false;
         }
       }
-    }
-
-
-    function normalizeEntryName(name) {
-      return String(name)
-        .normalize("NFKC")
-        .replace(/\u200B/g, "")
-        .trim()
-        .toLowerCase();
-    }
-
-    async function getRootEntries(dirHandle) {
-      const entries = [];
-      for await (const [name, handle] of dirHandle.entries()) {
-        entries.push({
-          name,
-          handle,
-          normalized: normalizeEntryName(name)
-        });
-      }
-      return entries;
-    }
-
-    async function findFileFlexible(dirHandle, wantedName) {
-      const target = normalizeEntryName(wantedName);
-      const entries = await getRootEntries(dirHandle);
-
-      return entries.find(({ handle, normalized }) => {
-        if (handle.kind !== "file") return false;
-
-        if (normalized === target) return true;
-
-        // Caso típico de Windows: launch.ini.ini
-        if (target === "launch.ini" && /^launch(?:\.ini)+$/.test(normalized)) {
-          return true;
-        }
-
-        return false;
-      }) || null;
-    }
-
-    async function findDirectoryFlexible(dirHandle, wantedName) {
-      const target = normalizeEntryName(wantedName);
-      const entries = await getRootEntries(dirHandle);
-
-      return entries.find(({ handle, normalized }) =>
-        handle.kind === "directory" && normalized === target
-      )?.handle || null;
-    }
-
-    async function directoryContainsSkinFiles(dirHandle) {
-      const entries = await getRootEntries(dirHandle);
-
-      // Con encontrar archivos dentro de Skins ya sabemos que no está vacía.
-      // También detectamos .xzp si el paquete de Aurora los usa.
-      return entries.some(({ handle, normalized }) =>
-        handle.kind === "file" &&
-        (normalized.endsWith(".xzp") || normalized.length > 0)
-      );
     }
 
     async function checkUsb() {
@@ -756,16 +698,6 @@
 
         checkList.hidden = false;
 
-        try {
-          const debugEntries = await getRootEntries(root);
-          const debugEl = $("usbDebugList");
-          if (debugEl) {
-            debugEl.textContent = debugEntries
-              .map(e => `${e.handle.kind === "directory" ? "[DIR] " : "[FILE]"} ${e.name}`)
-              .join("\n");
-          }
-        } catch {}
-
         const hasPayload = await existsInDirectory(root, "BadUpdatePayload", "directory");
         const hasContent = await existsInDirectory(root, "Content", "directory");
 
@@ -779,52 +711,24 @@
         }
 
         let hasAurora = false;
-        let hasAuroraSkin = false;
-        let hasLaunchIni = false;
-
         try {
-          const rootEntries = await getRootEntries(root);
-
-          // launch.ini en la raíz (también detecta por error launch.ini.ini)
-          const launchEntry = rootEntries.find(({ handle, normalized }) =>
-            handle.kind === "file" &&
-            (
-              normalized === "launch.ini" ||
-              /^launch(?:\.ini)+$/.test(normalized)
-            )
-          );
-          hasLaunchIni = !!launchEntry;
-
-          // Apps/Aurora/Aurora.xex
-          const appsDir = await findDirectoryFlexible(root, "Apps");
-          if (appsDir) {
-            const auroraDir = await findDirectoryFlexible(appsDir, "Aurora");
-
-            if (auroraDir) {
-              hasAurora = !!(await findFileFlexible(auroraDir, "Aurora.xex"));
-
-              const skinsDir = await findDirectoryFlexible(auroraDir, "Skins");
-              if (skinsDir) {
-                hasAuroraSkin = await directoryContainsSkinFiles(skinsDir);
-              }
-            }
-          }
-        } catch (error) {
-          console.error("Error comprobando Parte 2:", error);
-        }
+          const appsDir = await root.getDirectoryHandle("Apps");
+          const auroraDir = await appsDir.getDirectoryHandle("Aurora");
+          await auroraDir.getFileHandle("Aurora.xex");
+          hasAurora = true;
+        } catch {}
 
         setBadge("badgePayload", hasPayload);
         setBadge("badgeContent", hasContent);
         setBadge("badgeXex", hasXex);
         setBadge("badgeAurora", hasAurora);
-        setBadge("badgeLaunchIni", hasLaunchIni);
 
-        if ($("badgeAuroraSkin")) {
-          setBadge("badgeAuroraSkin", hasAuroraSkin);
-        }
+        const launchBadge = $("badgeLaunchIni");
+        launchBadge.textContent = launchIniConfirmed ? "Confirmado" : "Manual";
+        launchBadge.className = "badge " + (launchIniConfirmed ? "good" : "manual");
 
         const part1Ok = hasPayload && hasContent && hasXex;
-        const part2Ok = hasAurora && hasLaunchIni && (!$("badgeAuroraSkin") || hasAuroraSkin);
+        const part2Ok = hasAurora && launchIniConfirmed;
 
         usbStatus.className = part1Ok ? "status ok" : "status warn";
         usbStatus.innerHTML = `
@@ -834,8 +738,8 @@
             <small>${
               part1Ok
                 ? (part2Ok
-                    ? "Parte 1 y Parte 2 detectadas: BadUpdate + Aurora parecen correctamente colocados."
-                    : "Parte 1 correcta. Aurora es opcional y corresponde a la Parte 2 de la guía.")
+                    ? "Parte 1 y Parte 2 preparadas: BadUpdate + Aurora detectados y launch.ini confirmado manualmente."
+                    : "Parte 1 correcta. Para completar la Parte 2, comprueba launch.ini manualmente y pulsa Confirmar launch.ini.")
                 : "Descarga el paquete de la Parte 1 y extráelo en la raíz del USB."
             }</small>
           </div>`;
@@ -863,6 +767,16 @@
     }
 
     selectButtons.forEach(btn => btn.addEventListener("click", checkUsb));
+
+    $("confirmLaunchIni").addEventListener("click", () => {
+      launchIniConfirmed = !launchIniConfirmed;
+      const badge = $("badgeLaunchIni");
+      badge.textContent = launchIniConfirmed ? "Confirmado" : "Manual";
+      badge.className = "badge " + (launchIniConfirmed ? "good" : "manual");
+      $("confirmLaunchIni").textContent = launchIniConfirmed
+        ? "launch.ini confirmado"
+        : "Confirmar launch.ini";
+    });
 
     $("formatHelp").addEventListener("click", () => $("formatDialog").showModal());
     $("closeDialog").addEventListener("click", () => $("formatDialog").close());
