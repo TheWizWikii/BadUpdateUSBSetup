@@ -479,6 +479,13 @@
             <span class="badge" id="badgeLaunchIni">Pendiente</span>
           </div>
         </div>
+
+        <details id="usbDebug" style="margin-top:14px">
+          <summary style="cursor:pointer;color:#9fac9f;font-size:13px">
+            Diagnóstico: mostrar nombres que ve el navegador
+          </summary>
+          <pre id="usbDebugList" style="white-space:pre-wrap;margin-top:10px;padding:14px;border:1px solid #1b271e;border-radius:12px;background:#090d0a;color:#b8c3bb;font-size:12px"></pre>
+        </details>
       </section>
 
       <section class="panel">
@@ -660,30 +667,6 @@
       }
     }
 
-    async function fileExistsCaseInsensitive(dirHandle, wantedName) {
-      const target = wantedName.toLowerCase();
-      for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === "file" && name.toLowerCase() === target) return true;
-      }
-      return false;
-    }
-
-    async function getDirectoryCaseInsensitive(dirHandle, wantedName) {
-      const target = wantedName.toLowerCase();
-      for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === "directory" && name.toLowerCase() === target) return handle;
-      }
-      return null;
-    }
-
-    async function directoryContainsExtension(dirHandle, extension) {
-      const ext = extension.toLowerCase();
-      for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === "file" && name.toLowerCase().endsWith(ext)) return true;
-      }
-      return false;
-    }
-
     async function checkUsb() {
       if (!("showDirectoryPicker" in window)) {
         usbStatus.className = "status bad";
@@ -724,17 +707,26 @@
         let hasAurora = false;
         let hasAuroraSkin = false;
 
-        try {
-          const appsDir = await getDirectoryCaseInsensitive(root, "Apps");
-          if (appsDir) {
-            const auroraDir = await getDirectoryCaseInsensitive(appsDir, "Aurora");
-            if (auroraDir) {
-              hasAurora = await fileExistsCaseInsensitive(auroraDir, "Aurora.xex");
+        const rootEntries = await getRootEntries(root);
 
-              const skinsDir = await getDirectoryCaseInsensitive(auroraDir, "Skins");
+        // Mostramos exactamente lo que el navegador ve en la raíz.
+        const debugList = $("usbDebugList");
+        if (debugList) {
+          debugList.textContent = rootEntries
+            .map(e => `${e.handle.kind === "directory" ? "[DIR] " : "[FILE]"} ${e.name}`)
+            .join("\n");
+        }
+
+        try {
+          const appsDir = await getDirectoryFlexible(root, "Apps");
+          if (appsDir) {
+            const auroraDir = await getDirectoryFlexible(appsDir, "Aurora");
+            if (auroraDir) {
+              hasAurora = await fileExistsFlexible(auroraDir, "Aurora.xex");
+
+              const skinsDir = await getDirectoryFlexible(auroraDir, "Skins");
               if (skinsDir) {
-                // Aurora usa paquetes de skin .xzp dentro de la carpeta Skins.
-                hasAuroraSkin = await directoryContainsExtension(skinsDir, ".xzp");
+                hasAuroraSkin = await directoryHasSkinFile(skinsDir);
               }
             }
           }
@@ -742,12 +734,15 @@
           console.warn("Error comprobando Aurora:", error);
         }
 
-        // launch.ini debe existir EXACTAMENTE con ese nombre.
-        const hasLaunchIni = await fileExistsCaseInsensitive(root, "launch.ini");
-
-        // Detectamos el error típico de Windows al guardar como launch.ini.ini.
-        const hasDoubleLaunchIni = !hasLaunchIni &&
-          await fileExistsCaseInsensitive(root, "launch.ini.ini");
+        // Detector tolerante:
+        // acepta launch.ini y también el típico launch.ini.ini de Windows.
+        let hasLaunchIni = rootEntries.some(({handle, normalized}) =>
+          handle.kind === "file" &&
+          (
+            normalized === "launch.ini" ||
+            /^launch(?:\.ini)+$/.test(normalized)
+          )
+        );
 
         setBadge("badgePayload", hasPayload);
         setBadge("badgeContent", hasContent);
@@ -755,12 +750,6 @@
         setBadge("badgeAurora", hasAurora);
         setBadge("badgeLaunchIni", hasLaunchIni);
         setBadge("badgeAuroraSkin", hasAuroraSkin);
-
-        if (hasDoubleLaunchIni) {
-          const badge = $("badgeLaunchIni");
-          badge.textContent = "Renombrar";
-          badge.className = "badge missing";
-        }
 
         const part1Ok = hasPayload && hasContent && hasXex;
         const part2Ok = hasAurora && hasLaunchIni && hasAuroraSkin;
