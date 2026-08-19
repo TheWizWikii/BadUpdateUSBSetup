@@ -478,11 +478,16 @@
             <span><strong>launch.ini</strong><br><small>Parte 2 · Configuración de DashLaunch</small></span>
             <span class="badge" id="badgeLaunchIni">Pendiente</span>
           </div>
+
+          <div class="check">
+            <span><strong>Apps/Aurora/Skins</strong><br><small>Parte 2 · Archivos de skin de Aurora</small></span>
+            <span class="badge" id="badgeAuroraSkin">Pendiente</span>
+          </div>
         </div>
 
-        <details id="usbDebug" style="margin-top:14px">
+        <details style="margin-top:14px">
           <summary style="cursor:pointer;color:#9fac9f;font-size:13px">
-            Diagnóstico: mostrar nombres que ve el navegador
+            Diagnóstico: mostrar archivos detectados en la raíz
           </summary>
           <pre id="usbDebugList" style="white-space:pre-wrap;margin-top:10px;padding:14px;border:1px solid #1b271e;border-radius:12px;background:#090d0a;color:#b8c3bb;font-size:12px"></pre>
         </details>
@@ -667,6 +672,65 @@
       }
     }
 
+
+    function normalizeEntryName(name) {
+      return String(name)
+        .normalize("NFKC")
+        .replace(/\u200B/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    async function getRootEntries(dirHandle) {
+      const entries = [];
+      for await (const [name, handle] of dirHandle.entries()) {
+        entries.push({
+          name,
+          handle,
+          normalized: normalizeEntryName(name)
+        });
+      }
+      return entries;
+    }
+
+    async function findFileFlexible(dirHandle, wantedName) {
+      const target = normalizeEntryName(wantedName);
+      const entries = await getRootEntries(dirHandle);
+
+      return entries.find(({ handle, normalized }) => {
+        if (handle.kind !== "file") return false;
+
+        if (normalized === target) return true;
+
+        // Caso típico de Windows: launch.ini.ini
+        if (target === "launch.ini" && /^launch(?:\.ini)+$/.test(normalized)) {
+          return true;
+        }
+
+        return false;
+      }) || null;
+    }
+
+    async function findDirectoryFlexible(dirHandle, wantedName) {
+      const target = normalizeEntryName(wantedName);
+      const entries = await getRootEntries(dirHandle);
+
+      return entries.find(({ handle, normalized }) =>
+        handle.kind === "directory" && normalized === target
+      )?.handle || null;
+    }
+
+    async function directoryContainsSkinFiles(dirHandle) {
+      const entries = await getRootEntries(dirHandle);
+
+      // Con encontrar archivos dentro de Skins ya sabemos que no está vacía.
+      // También detectamos .xzp si el paquete de Aurora los usa.
+      return entries.some(({ handle, normalized }) =>
+        handle.kind === "file" &&
+        (normalized.endsWith(".xzp") || normalized.length > 0)
+      );
+    }
+
     async function checkUsb() {
       if (!("showDirectoryPicker" in window)) {
         usbStatus.className = "status bad";
@@ -692,6 +756,16 @@
 
         checkList.hidden = false;
 
+        try {
+          const debugEntries = await getRootEntries(root);
+          const debugEl = $("usbDebugList");
+          if (debugEl) {
+            debugEl.textContent = debugEntries
+              .map(e => `${e.handle.kind === "directory" ? "[DIR] " : "[FILE]"} ${e.name}`)
+              .join("\n");
+          }
+        } catch {}
+
         const hasPayload = await existsInDirectory(root, "BadUpdatePayload", "directory");
         const hasContent = await existsInDirectory(root, "Content", "directory");
 
@@ -706,53 +780,51 @@
 
         let hasAurora = false;
         let hasAuroraSkin = false;
-
-        const rootEntries = await getRootEntries(root);
-
-        // Mostramos exactamente lo que el navegador ve en la raíz.
-        const debugList = $("usbDebugList");
-        if (debugList) {
-          debugList.textContent = rootEntries
-            .map(e => `${e.handle.kind === "directory" ? "[DIR] " : "[FILE]"} ${e.name}`)
-            .join("\n");
-        }
+        let hasLaunchIni = false;
 
         try {
-          const appsDir = await getDirectoryFlexible(root, "Apps");
-          if (appsDir) {
-            const auroraDir = await getDirectoryFlexible(appsDir, "Aurora");
-            if (auroraDir) {
-              hasAurora = await fileExistsFlexible(auroraDir, "Aurora.xex");
+          const rootEntries = await getRootEntries(root);
 
-              const skinsDir = await getDirectoryFlexible(auroraDir, "Skins");
+          // launch.ini en la raíz (también detecta por error launch.ini.ini)
+          const launchEntry = rootEntries.find(({ handle, normalized }) =>
+            handle.kind === "file" &&
+            (
+              normalized === "launch.ini" ||
+              /^launch(?:\.ini)+$/.test(normalized)
+            )
+          );
+          hasLaunchIni = !!launchEntry;
+
+          // Apps/Aurora/Aurora.xex
+          const appsDir = await findDirectoryFlexible(root, "Apps");
+          if (appsDir) {
+            const auroraDir = await findDirectoryFlexible(appsDir, "Aurora");
+
+            if (auroraDir) {
+              hasAurora = !!(await findFileFlexible(auroraDir, "Aurora.xex"));
+
+              const skinsDir = await findDirectoryFlexible(auroraDir, "Skins");
               if (skinsDir) {
-                hasAuroraSkin = await directoryHasSkinFile(skinsDir);
+                hasAuroraSkin = await directoryContainsSkinFiles(skinsDir);
               }
             }
           }
         } catch (error) {
-          console.warn("Error comprobando Aurora:", error);
+          console.error("Error comprobando Parte 2:", error);
         }
-
-        // Detector tolerante:
-        // acepta launch.ini y también el típico launch.ini.ini de Windows.
-        let hasLaunchIni = rootEntries.some(({handle, normalized}) =>
-          handle.kind === "file" &&
-          (
-            normalized === "launch.ini" ||
-            /^launch(?:\.ini)+$/.test(normalized)
-          )
-        );
 
         setBadge("badgePayload", hasPayload);
         setBadge("badgeContent", hasContent);
         setBadge("badgeXex", hasXex);
         setBadge("badgeAurora", hasAurora);
         setBadge("badgeLaunchIni", hasLaunchIni);
-        setBadge("badgeAuroraSkin", hasAuroraSkin);
+
+        if ($("badgeAuroraSkin")) {
+          setBadge("badgeAuroraSkin", hasAuroraSkin);
+        }
 
         const part1Ok = hasPayload && hasContent && hasXex;
-        const part2Ok = hasAurora && hasLaunchIni && hasAuroraSkin;
+        const part2Ok = hasAurora && hasLaunchIni && (!$("badgeAuroraSkin") || hasAuroraSkin);
 
         usbStatus.className = part1Ok ? "status ok" : "status warn";
         usbStatus.innerHTML = `
