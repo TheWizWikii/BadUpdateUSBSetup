@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#107c10" />
-  <meta name="description" content="Guía USB para BadUpdate 1.3 + XeUnshackle y configuración de Aurora en Xbox 360." />
-  <title>BadUpdate USB Guide — Xbox 360</title>
+  <meta name="description" content="Descargas sencillas para BadUpdate 1.3, Aurora y ABadAvatar en Xbox 360." />
+  <title>Xbox 360 Exploit Guide — TheWizWiki</title>
 
   <style>
     :root{
@@ -382,635 +382,200 @@
       <div class="brand">
         <div class="orb">X</div>
         <div>
-          <strong>BadUpdate USB Guide</strong>
-          <span>BadUpdate 1.3 + XeUnshackle</span>
+          <strong>Xbox 360 Guide</strong>
+          <span>BadUpdate · Aurora · ABadAvatar</span>
         </div>
       </div>
       <div class="pill">Proyecto no oficial · Uso bajo tu responsabilidad</div>
     </header>
 
     <main>
-      <section class="hero">
+      <section class="hero" style="grid-template-columns:1fr;max-width:900px;margin:auto;text-align:center;padding-bottom:30px">
         <div>
-          <div class="eyebrow"><span class="dot"></span> Guía USB para Xbox 360</div>
-          <h1>Configura BadUpdate.<br><em>Paso a paso.</em></h1>
-          <p class="lead">
-            Sigue una guía sencilla, comprueba que la estructura de tu USB es correcta y descarga
-            el paquete con BadUpdate 1.3 + XeUnshackle desde un único sitio.
+          <div class="eyebrow"><span class="dot"></span> Xbox 360 · Elige lo que quieres hacer</div>
+          <h1 style="max-width:none">Todo preparado.<br><em>Elige tu opción.</em></h1>
+          <p class="lead" style="margin:0 auto">
+            No necesitas entender archivos, rutas ni configuraciones. Descarga el paquete que necesites,
+            extráelo en la raíz de tu USB FAT32 y sigue el vídeo.
           </p>
-          <div class="hero-actions">
-            <a class="btn primary" href="#descarga">Descargar Parte 1</a>
-            <a class="btn secondary" href="#aurora">Descargar Parte 2</a>
-            <button class="secondary" id="selectUsbTop">Comprobar mi USB</button>
-          </div>
-          <p style="margin-top:16px;color:#7f8b82;font-size:13px;line-height:1.55">
-            Esta web no formatea ni copia archivos automáticamente: te guía paso a paso y verifica que la estructura básica esté correcta.
-          </p>
-        </div>
-
-        <div class="console-card" aria-hidden="true">
-          <div class="ring"><div class="xmark">X</div></div>
-          <div class="float-card">
-            <span>Dashboard requerido<br><strong>17559</strong></span>
-            <span style="text-align:right">Método<br><strong>BadUpdate 1.3</strong></span>
-          </div>
         </div>
       </section>
 
-      <section class="steps">
-        <article class="step">
+      <section class="steps" style="margin-top:18px;margin-bottom:28px">
+        <article class="step" style="display:flex;flex-direction:column">
           <div class="num">1</div>
-          <h3>Descarga el paquete</h3>
-          <p>Descarga la Parte 1 y, si quieres Aurora, también el paquete de la Parte 2.</p>
+          <h3>¿Primera vez?</h3>
+          <p>Utiliza este paquete para preparar BadUpdate 1.3 + XeUnshackle con el método de Rock Band Blitz.</p>
+          <a class="btn primary" id="downloadBtn" href="#" target="_blank" rel="noopener" style="margin-top:auto">Descargar BadUpdate</a>
         </article>
-        <article class="step">
+
+        <article class="step" style="display:flex;flex-direction:column">
           <div class="num">2</div>
-          <h3>Copia al USB</h3>
-          <p>Extrae el contenido en la raíz de tu pendrive preparado en FAT32.</p>
+          <h3>¿Quieres Aurora?</h3>
+          <p>Si ya tienes BadUpdate funcionando, añade Aurora y el arranque configurado de la Parte 2.</p>
+          <a class="btn primary" id="auroraDownloadBtn" href="#" target="_blank" rel="noopener" style="margin-top:auto">Descargar Aurora</a>
         </article>
-        <article class="step">
+
+        <article class="step" style="display:flex;flex-direction:column;border-color:rgba(82,210,115,.32);box-shadow:0 0 35px rgba(16,124,16,.08)">
           <div class="num">3</div>
-          <h3>Comprueba tu USB</h3>
-          <p>Selecciona la raíz del pendrive y verifica que la estructura esté correctamente colocada.</p>
+          <h3>¿Sin Rock Band Blitz?</h3>
+          <p>Utiliza ABadAvatar desde el selector de perfiles. Incluye XeUnshackle Auto-Start preparado para la guía.</p>
+          <a class="btn primary" id="abadAvatarDownloadBtn" href="#" target="_blank" rel="noopener" style="margin-top:auto">Descargar ABadAvatar</a>
         </article>
       </section>
 
-
-
-
-
-      <section class="panel" id="descarga">
+      <section class="panel" style="max-width:900px;margin:0 auto 18px">
         <div class="panel-head">
           <div>
-            <h2>Paquete completo</h2>
-            <div class="sub">Descarga el paquete de la Parte 1 preparado para seguir la guía.</div>
+            <h2>¿Qué hago después de descargar?</h2>
+            <div class="sub">Los tres paquetes siguen la misma idea.</div>
           </div>
         </div>
 
-        <div class="download-card">
-          <div>
-            <h3>BadUpdate 1.3 + XeUnshackle</h3>
-            <p>Paquete recopilado para facilitar la instalación, respetando los créditos y proyectos originales.</p>
-          </div>
-          <a class="btn primary" id="downloadBtn" href="#" target="_blank" rel="noopener">
-            Descargar paquete
-          </a>
-        </div>
-
-        <div class="status warn" id="downloadNotice" style="margin-top:14px">
-          <span class="status-icon"></span>
-          <div>
-            <strong>Falta configurar la URL</strong><br>
-            <small>Edita <code>PACKAGE_URL</code> al principio del JavaScript con el enlace de tu release.</small>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel" id="aurora">
-        <div class="panel-head">
-          <div>
-            <h2>Parte 2 · Aurora + Autoboot</h2>
-            <div class="sub">
-              Para quienes ya tienen BadUpdate + XeUnshackle funcionando y quieren dejar Aurora listo para cargar después del exploit.
-            </div>
-          </div>
-        </div>
-
-        <div class="download-card">
-          <div>
-            <h3>Aurora + launch.ini</h3>
-            <p>
-              Descarga el segundo paquete y extrae su contenido en la raíz del mismo USB.
-              La estructura recomendada será <code>Apps/Aurora/</code> junto con <code>launch.ini</code> en la raíz.
-            </p>
-          </div>
-          <a class="btn primary" id="auroraDownloadBtn" href="#" target="_blank" rel="noopener">
-            Descargar Parte 2
-          </a>
-        </div>
-
-        <div class="status warn" id="auroraDownloadNotice" style="margin-top:14px">
-          <span class="status-icon"></span>
-          <div>
-            <strong>Falta configurar la URL de la Parte 2</strong><br>
-            <small>Edita <code>AURORA_PACKAGE_URL</code> con el enlace a tu ZIP de GitHub.</small>
-          </div>
-        </div>
-
-        <div class="warning" style="margin-top:16px">
-          <strong>Ruta de ejemplo:</strong> si Aurora está en
-          <code>Usb:\Apps\Aurora\Aurora.xex</code>, el <code>launch.ini</code>
-          debe apuntar exactamente a esa ubicación. Si cambias la carpeta, cambia también la ruta.
-        </div>
-
-        <div class="warning" style="margin-top:12px">
-          <strong>Nota:</strong> Chrome puede no mostrar <code>launch.ini</code> al comprobar la carpeta,
-          aunque el archivo esté correctamente en la raíz del USB. Compruébalo manualmente en Windows y
-          pulsa <strong>Confirmar launch.ini</strong> en el paso de verificación.
-        </div>
-
-        <div class="check-list" style="margin-top:16px">
+        <div class="check-list">
           <div class="check">
-            <span><strong>1. Extraer en la raíz</strong><br><small>No copies una carpeta contenedora adicional.</small></span>
+            <span><strong>1. Prepara un USB en FAT32</strong><br><small>Haz copia de seguridad antes de formatear.</small></span>
             <span class="badge good">USB</span>
           </div>
           <div class="check">
-            <span><strong>2. Comprobar archivos</strong><br><small>Usa “Comprobar mi USB” para verificar Aurora y launch.ini.</small></span>
-            <span class="badge good">Verificar</span>
+            <span><strong>2. Abre el ZIP que has descargado</strong><br><small>No copies el ZIP directamente al pendrive.</small></span>
+            <span class="badge good">ZIP</span>
           </div>
           <div class="check">
-            <span><strong>3. Ejecutar BadUpdate</strong><br><small>XeUnshackle carga DashLaunch y se utiliza la configuración del launch.ini.</small></span>
-            <span class="badge good">Xbox 360</span>
+            <span><strong>3. Copia su contenido a la raíz del USB</strong><br><small>Si estás actualizando tu instalación, sustituye los archivos correspondientes.</small></span>
+            <span class="badge good">Copiar</span>
+          </div>
+          <div class="check">
+            <span><strong>4. Sigue el vídeo correspondiente</strong><br><small>La web solo centraliza las descargas para que no tengas que buscar los archivos por separado.</small></span>
+            <span class="badge good">Listo</span>
           </div>
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" style="max-width:900px;margin:0 auto 18px;border-color:rgba(82,210,115,.25)">
         <div class="panel-head">
           <div>
-            <h2>Prepara y copia al USB</h2>
-            <div class="sub">Antes de copiar los paquetes, asegúrate de que la Xbox 360 pueda leer correctamente el dispositivo.</div>
-          </div>
-        </div>
-
-        <div class="warning">
-          <strong>Importante:</strong> una página web no puede formatear de forma segura una unidad USB
-          ni detectar de forma fiable si el sistema de archivos es FAT32. Si tienes dudas, utiliza las
-          herramientas de Windows o prepara el dispositivo desde la propia Xbox 360 antes de copiar los archivos.
-        </div>
-      </section>
-
-      <section class="panel" id="usb">
-        <div class="panel-head">
-          <div>
-            <h2>Comprobar estructura del USB</h2>
-            <div class="sub">Selecciona la raíz del pendrive. No se sube ningún archivo a Internet.</div>
-          </div>
-        </div>
-
-        <div class="status" id="usbStatus">
-          <span class="status-icon"></span>
-          <div>
-            <strong>Ningún USB seleccionado</strong><br>
-            <small>Selecciona la unidad para comenzar la comprobación.</small>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="primary" id="selectUsb">Comprobar mi USB</button>
-          <button class="secondary" id="confirmLaunchIni">Confirmar launch.ini</button>
-          <button class="secondary" id="formatHelp">¿Necesitas formatearlo?</button>
-        </div>
-
-        <div class="check-list" id="checkList" hidden>
-          <div class="check">
-            <span><strong>BadUpdatePayload</strong><br><small>Carpeta del payload</small></span>
-            <span class="badge" id="badgePayload">Pendiente</span>
-          </div>
-          <div class="check">
-            <span><strong>Content</strong><br><small>Contenido necesario para Rock Band Blitz</small></span>
-            <span class="badge" id="badgeContent">Pendiente</span>
-          </div>
-          <div class="check">
-            <span><strong>default.xex</strong><br><small>Payload dentro de BadUpdatePayload</small></span>
-            <span class="badge" id="badgeXex">Pendiente</span>
-          </div>
-
-          <div class="check" style="margin-top:8px;border-color:rgba(82,210,115,.22)">
-            <span><strong>Apps/Aurora/Aurora.xex</strong><br><small>Parte 2 · Dashboard Aurora</small></span>
-            <span class="badge" id="badgeAurora">Pendiente</span>
-          </div>
-
-          <div class="check">
-            <span><strong>launch.ini</strong><br><small>Parte 2 · Verificación manual en la raíz del USB</small></span>
-            <span class="badge manual" id="badgeLaunchIni">Manual</span>
-          </div>
-
-          <div class="check">
-            <span><strong>Apps/Aurora/Skins</strong><br><small>Parte 2 · Archivos de skin de Aurora</small></span>
-            <span class="badge" id="badgeAuroraSkin">Pendiente</span>
-          </div>
-        </div>
-
-        <details style="margin-top:14px">
-          <summary style="cursor:pointer;color:#9fac9f;font-size:13px">
-            Diagnóstico: mostrar archivos detectados en la raíz
-          </summary>
-          <pre id="usbDebugList" style="white-space:pre-wrap;margin-top:10px;padding:14px;border:1px solid #1b271e;border-radius:12px;background:#090d0a;color:#b8c3bb;font-size:12px"></pre>
-        </details>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>Antes de continuar</h2>
-            <div class="sub">Un par de comprobaciones que merece la pena hacer siempre.</div>
+            <h2>ABadAvatar · Importante</h2>
+            <div class="sub">Solo necesitas recordar estas tres cosas.</div>
           </div>
         </div>
         <div class="check-list">
-          <div class="check"><span>Dashboard de la consola</span><span class="badge good">17559</span></div>
-          <div class="check"><span>Xbox Live durante el exploit</span><span class="badge missing">Desconectado</span></div>
-          <div class="check"><span>Contenido comercial</span><span class="badge">Obtenido legalmente</span></div>
-          <div class="check"><span>XeUnshackle</span><span class="badge">Software beta</span></div>
+          <div class="check"><span>La Xbox debe tener instalados los datos de Avatar.</span><span class="badge good">Avatar</span></div>
+          <div class="check"><span>Utiliza el exploit con Xbox Live desconectado.</span><span class="badge missing">Offline</span></div>
+          <div class="check"><span>No inicies sesión en el perfil de ABadAvatar: ve al selector y espera.</span><span class="badge good">Esperar</span></div>
+        </div>
+        <div class="warning" style="margin-top:16px">
+          <strong>¿Ya utilizas Rock Band Blitz y estás contento?</strong>
+          No tienes que cambiar nada. ABadAvatar es simplemente una alternativa más directa.
         </div>
       </section>
 
       <div class="legal">
-        Este sitio no está afiliado con Microsoft, Xbox, Grimdoomer ni los desarrolladores de XeUnshackle.
-        Xbox y Xbox 360 son marcas de sus respectivos propietarios. Respeta siempre las licencias originales
-        de los proyectos incluidos en tu paquete y acredita a sus desarrolladores.
+        Proyecto no oficial. Los paquetes recopilan herramientas de sus respectivos proyectos y desarrolladores originales.
+        Xbox y Xbox 360 son marcas de sus respectivos propietarios. Utiliza únicamente contenido obtenido legalmente.
       </div>
+
+      <!-- Avisos ocultos: el JavaScript conserva la misma lógica de URLs -->
+      <div id="downloadNotice" hidden></div>
+      <div id="auroraDownloadNotice" hidden></div>
+      <div id="abadAvatarDownloadNotice" hidden></div>
     </main>
   </div>
 
-  <dialog id="formatDialog">
-    <div class="modal">
-      <h3>Preparar el USB en FAT32</h3>
-      <p>
-        Los navegadores no permiten que esta página formatee una unidad completa.
-        Hazlo manualmente y después vuelve aquí para seleccionar la raíz del USB.
-      </p>
-      <ol>
-        <li>Haz una copia de cualquier archivo importante del pendrive.</li>
-        <li>Formatea la unidad como <strong>FAT32</strong> con Windows o prepárala desde la Xbox 360.</li>
-        <li>Vuelve a esta página y pulsa <strong>Seleccionar USB</strong>.</li>
-        <li>Descarga el paquete y extráelo en la raíz del dispositivo.</li>
-      </ol>
-      <div class="warning"><strong>Atención:</strong> formatear elimina los archivos almacenados en la unidad.</div>
-      <div class="actions">
-        <button class="secondary" id="closeDialog">Entendido</button>
-      </div>
-    </div>
-  </dialog>
+
 
   <script>
-    /*
-      ==============================================================
-      CONFIGURACIÓN
-      ==============================================================
-    */
-
     const PACKAGE_URL =
       "https://github.com/TheWizWikii/BadUpdateUSBSetup/releases/download/1.3/BadUpdate-XeUnshackle.zip";
 
     const AURORA_PACKAGE_URL =
       "https://github.com/TheWizWikii/BadUpdateUSBSetup/releases/download/1.3/Aurora-Autoboot.zip";
 
-    const $ = (id) => document.getElementById(id);
-    const selectButtons = [$("selectUsb"), $("selectUsbTop")];
-    const usbStatus = $("usbStatus");
-    const checkList = $("checkList");
+    const ABADAVATAR_PACKAGE_URL =
+      "https://github.com/TheWizWikii/BadUpdateUSBSetup/releases/download/1.3/BadAvatar.zip";
 
-    let launchIniConfirmed = false;
+    document.getElementById("downloadBtn").href = PACKAGE_URL;
+    document.getElementById("auroraDownloadBtn").href = AURORA_PACKAGE_URL;
+    document.getElementById("abadAvatarDownloadBtn").href = ABADAVATAR_PACKAGE_URL;
 
-    function setBadge(id, ok) {
-      const el = $(id);
-      if (!el) return;
-      el.textContent = ok ? "Correcto" : "No encontrado";
-      el.className = "badge " + (ok ? "good" : "missing");
-    }
-
-    function normalizeEntryName(name) {
-      return String(name)
-        .normalize("NFKC")
-        .replace(/\u200B/g, "")
-        .trim()
-        .toLowerCase();
-    }
-
-    async function getEntries(dirHandle) {
-      const entries = [];
-      for await (const [name, handle] of dirHandle.entries()) {
-        entries.push({
-          name,
-          handle,
-          normalized: normalizeEntryName(name)
-        });
-      }
-      return entries;
-    }
-
-    async function findDirectory(dirHandle, wantedName) {
-      const target = normalizeEntryName(wantedName);
-      const entries = await getEntries(dirHandle);
-
-      return entries.find(({ handle, normalized }) =>
-        handle.kind === "directory" && normalized === target
-      )?.handle || null;
-    }
-
-    async function findFile(dirHandle, wantedName) {
-      const target = normalizeEntryName(wantedName);
-      const entries = await getEntries(dirHandle);
-
-      return entries.find(({ handle, normalized }) =>
-        handle.kind === "file" && normalized === target
-      )?.handle || null;
-    }
-
-    async function hasSkinFiles(skinsDir) {
-      const entries = await getEntries(skinsDir);
-
-      // Consideramos válida la carpeta Skins si contiene algún archivo.
-      // Aurora puede usar distintos paquetes/estructuras según la distribución.
-      return entries.some(({ handle }) => handle.kind === "file");
-    }
-
-    async function checkUsb() {
-      if (!("showDirectoryPicker" in window)) {
-        usbStatus.className = "status bad";
-        usbStatus.innerHTML = `
-          <span class="status-icon"></span>
-          <div>
-            <strong>Navegador no compatible</strong><br>
-            <small>Utiliza una versión reciente de Chrome o Edge en escritorio.</small>
-          </div>`;
-        return;
-      }
-
-      try {
-        const root = await window.showDirectoryPicker({ mode: "read" });
-
-        usbStatus.className = "status ok";
-        usbStatus.innerHTML = `
-          <span class="status-icon"></span>
-          <div>
-            <strong>Unidad/carpeta seleccionada: ${escapeHtml(root.name)}</strong><br>
-            <small>Comprobando la estructura de archivos...</small>
-          </div>`;
-
-        checkList.hidden = false;
-
-        // Diagnóstico: exactamente lo que el navegador ve en la raíz.
-        try {
-          const debugEntries = await getEntries(root);
-          const debugEl = $("usbDebugList");
-          if (debugEl) {
-            debugEl.textContent = debugEntries
-              .map(e => `${e.handle.kind === "directory" ? "[DIR] " : "[FILE]"} ${e.name}`)
-              .join("\n");
-          }
-        } catch {}
-
-        // PARTE 1
-        const payloadDir = await findDirectory(root, "BadUpdatePayload");
-        const contentDir = await findDirectory(root, "Content");
-
-        const hasPayload = !!payloadDir;
-        const hasContent = !!contentDir;
-        const hasXex = payloadDir ? !!(await findFile(payloadDir, "default.xex")) : false;
-
-        // PARTE 2
-        let hasAurora = false;
-        let hasAuroraSkin = false;
-
-        const appsDir = await findDirectory(root, "Apps");
-        if (appsDir) {
-          const auroraDir = await findDirectory(appsDir, "Aurora");
-
-          if (auroraDir) {
-            hasAurora = !!(await findFile(auroraDir, "Aurora.xex"));
-
-            const skinsDir = await findDirectory(auroraDir, "Skins");
-            if (skinsDir) {
-              hasAuroraSkin = await hasSkinFiles(skinsDir);
-            }
-          }
-        }
-
-        setBadge("badgePayload", hasPayload);
-        setBadge("badgeContent", hasContent);
-        setBadge("badgeXex", hasXex);
-        setBadge("badgeAurora", hasAurora);
-        setBadge("badgeAuroraSkin", hasAuroraSkin);
-
-        // launch.ini se confirma manualmente porque Chromium puede no mostrarlo
-        // al enumerar la carpeta aunque esté realmente en la raíz del USB.
-        const launchBadge = $("badgeLaunchIni");
-        if (launchBadge) {
-          launchBadge.textContent = launchIniConfirmed ? "Confirmado" : "Manual";
-          launchBadge.className = "badge " + (launchIniConfirmed ? "good" : "manual");
-        }
-
-        const part1Ok = hasPayload && hasContent && hasXex;
-        const part2Ok = hasAurora && hasAuroraSkin && launchIniConfirmed;
-
-        if (!part1Ok) {
-          usbStatus.className = "status warn";
-          usbStatus.innerHTML = `
-            <span class="status-icon"></span>
-            <div>
-              <strong>Faltan archivos de BadUpdate</strong><br>
-              <small>Revisa los elementos de la Parte 1 marcados como No encontrado.</small>
-            </div>`;
-        } else if (part2Ok) {
-          usbStatus.className = "status ok";
-          usbStatus.innerHTML = `
-            <span class="status-icon"></span>
-            <div>
-              <strong>Parte 1 y Parte 2 preparadas</strong><br>
-              <small>BadUpdate, Aurora y skins detectados. launch.ini confirmado manualmente.</small>
-            </div>`;
-        } else {
-          usbStatus.className = "status ok";
-          usbStatus.innerHTML = `
-            <span class="status-icon"></span>
-            <div>
-              <strong>BadUpdate está correctamente preparado</strong><br>
-              <small>Parte 1 correcta. Para completar la Parte 2, revisa Aurora/Skins y confirma launch.ini.</small>
-            </div>`;
-        }
-
-      } catch (error) {
-        if (error && error.name === "AbortError") return;
-
-        usbStatus.className = "status bad";
-        usbStatus.innerHTML = `
-          <span class="status-icon"></span>
-          <div>
-            <strong>No se pudo acceder a la unidad</strong><br>
-            <small>${escapeHtml(error?.message || "Permiso denegado o error desconocido.")}</small>
-          </div>`;
-      }
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    selectButtons.forEach(btn => {
-      if (btn) btn.addEventListener("click", checkUsb);
-    });
-
-    $("confirmLaunchIni")?.addEventListener("click", () => {
-      launchIniConfirmed = !launchIniConfirmed;
-
-      const badge = $("badgeLaunchIni");
-      if (badge) {
-        badge.textContent = launchIniConfirmed ? "Confirmado" : "Manual";
-        badge.className = "badge " + (launchIniConfirmed ? "good" : "manual");
-      }
-
-      $("confirmLaunchIni").textContent = launchIniConfirmed
-        ? "launch.ini confirmado"
-        : "Confirmar launch.ini";
-    });
-
-    $("formatHelp")?.addEventListener("click", () => $("formatDialog").showModal());
-    $("closeDialog")?.addEventListener("click", () => $("formatDialog").close());
-
-    // DESCARGA PARTE 1
-    const downloadBtn = $("downloadBtn");
-    if (PACKAGE_URL) {
-      downloadBtn.href = PACKAGE_URL;
-      const notice = $("downloadNotice");
-      if (notice) notice.style.display = "none";
-    }
-
-    // DESCARGA PARTE 2
-    const auroraDownloadBtn = $("auroraDownloadBtn");
-    if (AURORA_PACKAGE_URL) {
-      auroraDownloadBtn.href = AURORA_PACKAGE_URL;
-      const notice = $("auroraDownloadNotice");
-      if (notice) notice.style.display = "none";
-    }
-
-    // Fondo animado: red de nodos verde neón
+    // Fondo animado: red verde neón.
     (() => {
       const canvas = document.getElementById("neonNetwork");
       if (!canvas) return;
-
       const ctx = canvas.getContext("2d");
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      let width = 0;
-      let height = 0;
+      let width = 0, height = 0;
       let dpr = Math.min(window.devicePixelRatio || 1, 2);
       let nodes = [];
-      let mouse = { x: -9999, y: -9999, active: false };
-
+      let mouse = { x:-9999, y:-9999, active:false };
       const MAX_LINK_DISTANCE = 145;
       const MOUSE_LINK_DISTANCE = 185;
 
-      function nodeCount() {
+      function nodeCount(){
         const area = window.innerWidth * window.innerHeight;
         return Math.max(34, Math.min(92, Math.floor(area / 18000)));
       }
-
-      function makeNode() {
+      function makeNode(){
         const speed = reducedMotion ? 0 : (0.10 + Math.random() * 0.18);
         const angle = Math.random() * Math.PI * 2;
-
         return {
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          r: 0.7 + Math.random() * 1.35,
-          pulse: Math.random() * Math.PI * 2
+          x:Math.random()*width, y:Math.random()*height,
+          vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
+          r:0.7+Math.random()*1.35, pulse:Math.random()*Math.PI*2
         };
       }
-
-      function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        width = window.innerWidth;
-        height = window.innerHeight;
-
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = width + "px";
-        canvas.style.height = height + "px";
-
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
+      function resize(){
+        dpr = Math.min(window.devicePixelRatio || 1,2);
+        width = window.innerWidth; height = window.innerHeight;
+        canvas.width = Math.floor(width*dpr);
+        canvas.height = Math.floor(height*dpr);
+        canvas.style.width = width+"px"; canvas.style.height = height+"px";
+        ctx.setTransform(dpr,0,0,dpr,0,0);
         const target = nodeCount();
-
-        while (nodes.length < target) nodes.push(makeNode());
-        if (nodes.length > target) nodes.length = target;
+        while(nodes.length<target) nodes.push(makeNode());
+        if(nodes.length>target) nodes.length=target;
       }
-
-      function drawLine(a, b, distance, maxDistance, alphaBoost = 1) {
-        const alpha = Math.max(0, 1 - distance / maxDistance) * 0.24 * alphaBoost;
-        if (alpha <= 0) return;
-
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = `rgba(46,255,111,${alpha})`;
-        ctx.lineWidth = 0.7;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = "rgba(20,255,90,.22)";
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+      function drawLine(a,b,d,max,boost=1){
+        const alpha = Math.max(0,1-d/max)*0.24*boost;
+        if(alpha<=0) return;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(46,255,111,${alpha})`;
+        ctx.lineWidth=.7; ctx.shadowBlur=8;
+        ctx.shadowColor="rgba(20,255,90,.22)"; ctx.stroke(); ctx.shadowBlur=0;
       }
-
-      function frame() {
-        ctx.clearRect(0, 0, width, height);
-
-        for (const n of nodes) {
-          if (!reducedMotion) {
-            n.x += n.vx;
-            n.y += n.vy;
-            n.pulse += 0.016;
-
-            if (n.x < -10) n.x = width + 10;
-            if (n.x > width + 10) n.x = -10;
-            if (n.y < -10) n.y = height + 10;
-            if (n.y > height + 10) n.y = -10;
+      function frame(){
+        ctx.clearRect(0,0,width,height);
+        for(const n of nodes){
+          if(!reducedMotion){
+            n.x+=n.vx; n.y+=n.vy; n.pulse+=.016;
+            if(n.x<-10)n.x=width+10; if(n.x>width+10)n.x=-10;
+            if(n.y<-10)n.y=height+10; if(n.y>height+10)n.y=-10;
           }
-
           ctx.beginPath();
-          ctx.arc(n.x, n.y, n.r + Math.sin(n.pulse) * 0.18, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(78,255,132,.72)";
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = "rgba(35,255,100,.55)";
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          ctx.arc(n.x,n.y,n.r+Math.sin(n.pulse)*.18,0,Math.PI*2);
+          ctx.fillStyle="rgba(78,255,132,.72)";
+          ctx.shadowBlur=10; ctx.shadowColor="rgba(35,255,100,.55)";
+          ctx.fill(); ctx.shadowBlur=0;
         }
-
-        for (let i = 0; i < nodes.length; i++) {
-          const a = nodes[i];
-
-          for (let j = i + 1; j < nodes.length; j++) {
-            const b = nodes[j];
-            const dist = Math.hypot(a.x - b.x, a.y - b.y);
-
-            if (dist < MAX_LINK_DISTANCE) {
-              drawLine(a, b, dist, MAX_LINK_DISTANCE);
-            }
+        for(let i=0;i<nodes.length;i++){
+          const a=nodes[i];
+          for(let j=i+1;j<nodes.length;j++){
+            const b=nodes[j], d=Math.hypot(a.x-b.x,a.y-b.y);
+            if(d<MAX_LINK_DISTANCE) drawLine(a,b,d,MAX_LINK_DISTANCE);
           }
-
-          if (mouse.active) {
-            const dist = Math.hypot(a.x - mouse.x, a.y - mouse.y);
-
-            if (dist < MOUSE_LINK_DISTANCE) {
-              drawLine(a, mouse, dist, MOUSE_LINK_DISTANCE, 1.5);
-            }
+          if(mouse.active){
+            const d=Math.hypot(a.x-mouse.x,a.y-mouse.y);
+            if(d<MOUSE_LINK_DISTANCE) drawLine(a,mouse,d,MOUSE_LINK_DISTANCE,1.5);
           }
         }
-
         requestAnimationFrame(frame);
       }
-
-      window.addEventListener("resize", resize);
-
-      window.addEventListener("pointermove", (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-        mouse.active = true;
-      }, { passive: true });
-
-      window.addEventListener("pointerleave", () => {
-        mouse.active = false;
-      });
-
-      resize();
-      requestAnimationFrame(frame);
+      window.addEventListener("resize",resize);
+      window.addEventListener("pointermove",e=>{
+        mouse.x=e.clientX; mouse.y=e.clientY; mouse.active=true;
+      },{passive:true});
+      window.addEventListener("pointerleave",()=>mouse.active=false);
+      resize(); requestAnimationFrame(frame);
     })();
   </script>
 </body>
